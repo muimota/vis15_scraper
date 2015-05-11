@@ -25,7 +25,15 @@ class WebCache:
 			
 		return html[0]
 
-	def listURLs(self):
-		nope
+	def listUrls(self):
+		self.cursor.execute('SELECT url from htmlpages')
+		urltuples = self.cursor.fetchall()
+		urls = []
+
+		for urltuple in urltuples:
+			urls.append(urltuple[0])
+
+		return urls
+
 
 

@@ -3,9 +3,6 @@ import sys,urllib
 from bs4 import BeautifulSoup
 from webcache import WebCache
 
-reload(sys)  # Reload does the trick!
-sys.setdefaultencoding("utf-8")
-
 def parseArticle(url,webcache = None):
 	
 	if(webcache == None):
@@ -77,23 +74,4 @@ def getArticlesFromListPage(url,webcache = None):
 		articles.append(anchor['href'])
 
 	return articles
-
-if __name__ == "__main__":
-
- 	wb = WebCache()
- 	
-	listPages = getListPagesByTag("protestas_sociales")
-
-	errorPages = []
-
-	for listPage in listPages[0:16]:
-
-		print ("listPage %s" % listPage)
-		articleUrls = getArticlesFromListPage(listPage,wb)
-		for articleUrl in articleUrls:
-			try:
-				article = parseArticle(articleUrl,wb)
-				print article
-			except Exception as e:
-				articleUrl
 
