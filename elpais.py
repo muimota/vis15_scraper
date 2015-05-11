@@ -15,13 +15,13 @@ def parseArticle(url):
 
 	firma = soup.select("span.firma")[0]
 	try:
-		author = firma.find("a", rel="author").text.strip()
+		author	= firma.find("a", rel="author").text.strip()
 	except:
-		author = ""
+		author	= ""
 	try:
 		place	= firma.select("span.data")[0].text.strip()
 	except:
-		place  = ""
+		place	= ""
 	date    = firma.select("a.actualizado")[0]['href'].split('/')[-1]
 
 	subtitles = []
@@ -41,7 +41,7 @@ def parseArticle(url):
 	for li in tagsLi:
 		tags.append(li.text)
 
-	article = {"author":author,"title":title,"tags":tags,"subtitles":subtitles,"links":links,"url":url,"place":place,"date":date}
+	article = {"author":author,"title":title,"tags":tags,"subtitles":subtitles,"links":links,"url":url,"place":place,"date":date,"body":body}
 	return article
 
 
@@ -70,21 +70,19 @@ def getArticlesFromListPage(url):
 
 	return articles
 
+if __name__ == "__main__":
 
-listPages = getListPagesByTag("protestas_sociales")
+	listPages = getListPagesByTag("protestas_sociales")
 
-errorPages = []
+	errorPages = []
 
-for listPage in listPages[10:15]:
+	for listPage in listPages[10:15]:
 
-	print ("listPage %s" % listPage)
-	articleUrls = getArticlesFromListPage(listPage)
-	for articleUrl in articleUrls:
-		try:
-			parseArticle(articleUrl)
-		except Exception as e:
-			print articleUrl
-
-
-#print(len(articleUrls))
+		print ("listPage %s" % listPage)
+		articleUrls = getArticlesFromListPage(listPage)
+		for articleUrl in articleUrls:
+			try:
+				parseArticle(articleUrl)
+			except Exception as e:
+				print articleUrl
 
