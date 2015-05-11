@@ -1,13 +1,18 @@
-import urllib
-import sys
+
+import sys,urllib
 from bs4 import BeautifulSoup
+from webcache import WebCache
 
 reload(sys)  # Reload does the trick!
-sys.setdefaultencoding('UTF8')
+sys.setdefaultencoding("utf-8")
 
-def parseArticle(url):
-	html_doc = urllib.urlopen(url).read()
-
+def parseArticle(url,webcache = None):
+	
+	if(webcache == None):
+		html_doc = urllib.urlopen(url).read()
+	else:
+		html_doc = webcache.get(url)
+	
 	soup  = BeautifulSoup(html_doc)
 
 	title = soup.select("#titulo_noticia")[0].text.strip()
@@ -41,7 +46,7 @@ def parseArticle(url):
 	for li in tagsLi:
 		tags.append(li.text)
 
-	article = {"author":author,"title":title,"tags":tags,"subtitles":subtitles,"links":links,"url":url,"place":place,"date":date,"body":body}
+	article = {"author":author,"title":title,"tags":tags,"subtitles":subtitles,"links":links,"url":url,"place":place,"date":date}
 	return article
 
 
@@ -57,10 +62,13 @@ def getListPagesByTag(tag):
 		urlpages.append(url+str(i))
 	return urlpages
 
-def getArticlesFromListPage(url):
+def getArticlesFromListPage(url,webcache = None):
 	
-	html_doc = urllib.urlopen(url).read()
-
+	if(webcache == None):
+		html_doc = urllib.urlopen(url).read()
+	else:
+		html_doc = webcache.get(url)
+	
 	soup = BeautifulSoup(html_doc)
 	articles = []
 	anchors = soup.select(".article > h2 > a")
@@ -72,17 +80,20 @@ def getArticlesFromListPage(url):
 
 if __name__ == "__main__":
 
+ 	wb = WebCache()
+ 	
 	listPages = getListPagesByTag("protestas_sociales")
 
 	errorPages = []
 
-	for listPage in listPages[10:15]:
+	for listPage in listPages[0:16]:
 
 		print ("listPage %s" % listPage)
-		articleUrls = getArticlesFromListPage(listPage)
+		articleUrls = getArticlesFromListPage(listPage,wb)
 		for articleUrl in articleUrls:
 			try:
-				parseArticle(articleUrl)
+				article = parseArticle(articleUrl,wb)
+				print article
 			except Exception as e:
-				print articleUrl
+				articleUrl
 
