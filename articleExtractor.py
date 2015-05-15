@@ -1,5 +1,5 @@
 from webcache import WebCache
-from thingscounter import thingsCounter
+from thingscounter import thingsCounter,getFiguresFromArticle
 from bs4 import BeautifulSoup
 import random,re,sys,pickle
 
@@ -13,21 +13,17 @@ filename = 'protestas.pickle'
 graph = pickle.load(open(filename,'rb'))
 
 articleIds = graph.keys()
-
+articleCount = 0
 for articleId in articleIds:
 
-	url = graph[articleId]['url']
-	html_doc = wb.get(url)
-	soup  = BeautifulSoup(html_doc)
-	article_body = soup.select('#cuerpo_noticia')
-	article_body = re.sub('<[^<]+?>', '', str(article_body))
-	
-	title = graph[articleId]['title']
-	subtitles = "#".join(graph[articleId]['subtitles'])
+	article = graph[articleId]
 
-	articleThings = thingsCounter(article_body)
-	
-	print articleThings
+	articleThings = getFiguresFromArticle(article)
+	if len(articleThings) > 0:
+		article['things'] = articleThings
+		print article['url']
+		print articleThings
+		articleCount = articleCount + 1
 
 	for thing in articleThings:
 		if thing in things:
@@ -35,11 +31,23 @@ for articleId in articleIds:
 		else:
 			things[thing] = 1
 
-f = open('things-body.csv','w')
+print ("articles:%s article with numbers:%s" % (len(articleIds),articleCount))
+
+f = open('things-all.csv','w')
 for thing in things:
 	line  = ('"%s",%s' % (thing,things[thing])) 
 	f.write(line+'\n')
-
 f.close()
+
+filename = 'protests.pickle'
+pickle.dump(graph,open(filename,'wb'))
+
+articleIds = graph.keys()
+for articleId in articleIds:
+	article = graph[articleId]
+	if 'things' in article:
+		print article['things']
+
+
 
 
