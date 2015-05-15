@@ -9,7 +9,7 @@ class WebCache:
 		
 		self.cursor = self.conn.cursor()
 		# Create table
-		self.cursor.execute('''CREATE TABLE if not exists htmlpages (url text, html text)''')
+		self.cursor.execute('''CREATE TABLE if not exists htmlpages (url text UNIQUE, html text)''')
 
 	def get(self,url):
 		

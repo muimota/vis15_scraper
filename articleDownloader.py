@@ -3,17 +3,18 @@ from webcache import WebCache
 
 wb = WebCache()
 	
-listPages = elpais.getListPagesByTag("protestas_sociales")
+listPages = elpais.getListPagesByTag("actos_protesta")
 
-errorPages = []
 print len(listPages)
-for listPage in listPages[200:201]:
+for listPage in listPages:
 
 	print ("listPage %s" % listPage)
-	articleUrls = elpais.getArticlesFromListPage(listPage,wb)[0]
+	
+	articleUrls = elpais.getArticlesFromListPage(listPage,wb)
+
 	for articleUrl in articleUrls:
 		try:
 			article = elpais.parseArticle(articleUrl,wb)
 			print article
 		except Exception as e:
-			articleUrl
+			print "error:" + articleUrl

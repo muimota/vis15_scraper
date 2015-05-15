@@ -1,6 +1,7 @@
 # coding=utf-8
 
-import elpais,sys,os,pickle
+import elpais,sys,os
+import cPickle as pickle
 from webcache import WebCache
 
 
@@ -14,7 +15,7 @@ articleUrls = wb.listUrls();
 def getArticleId(articleUrl):
 	return articleUrl.split('/')[-1][:-5]
 
-filename = 'espania.pickle'
+filename = 'protestas.pickle'
 if(os.path.isfile(filename)):
 	graph = pickle.load(open(filename,'rb'))
 else:
@@ -35,11 +36,10 @@ for articleUrl in articleUrls:
 		try:
 			
 			article  = elpais.parseArticle(articleUrl,wb)
-			if(u'España' in article['tags'] and u'Opinión' not in article['tags']):
+			#nos quedamos con los articulos que no sean de opinion y que tengan una  ciudad asociada
+			if(u'España' in article['tags'] and u'Opinión' not in article['tags'] and len(article['place'])>0):
 				article['links'] = map(getArticleId,article['links'])
-				print article['tags']
-			
-			graph[articleId] = article
+				graph[articleId] = article
 
 		except:
 		

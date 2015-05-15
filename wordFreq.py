@@ -19,6 +19,7 @@ for articleId in articleIds:
 	
 	article = graph[articleId]
 	articleTags = article['tags']
+	
 	for tag in articleTags:
 		if tag in tags:
 			tags[tag] = tags[tag]+1
