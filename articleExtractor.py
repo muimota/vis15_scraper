@@ -14,17 +14,19 @@ graph = pickle.load(open(filename,'rb'))
 
 articleIds = graph.keys()
 
-for articleId in articleIds[:50]:
+for articleId in articleIds:
 
 	url = graph[articleId]['url']
 	html_doc = wb.get(url)
 	soup  = BeautifulSoup(html_doc)
 	article_body = soup.select('#cuerpo_noticia')
 	article_body = re.sub('<[^<]+?>', '', str(article_body))
+	
+	title = graph[articleId]['title']
+	subtitles = "#".join(graph[articleId]['subtitles'])
 
 	articleThings = thingsCounter(article_body)
 	
-	print url
 	print articleThings
 
 	for thing in articleThings:
@@ -33,7 +35,7 @@ for articleId in articleIds[:50]:
 		else:
 			things[thing] = 1
 
-f = open('things.csv','w')
+f = open('things-body.csv','w')
 for thing in things:
 	line  = ('"%s",%s' % (thing,things[thing])) 
 	f.write(line+'\n')
