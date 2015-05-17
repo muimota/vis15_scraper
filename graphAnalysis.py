@@ -7,7 +7,7 @@ from webcache import WebCache
 reload(sys)  # Reload does the trick!
 sys.setdefaultencoding("utf-8")
 
-filename = 'protestas.pickle'
+filename = 'protests.pickle'
 graph = pickle.load(open(filename,'rb'))
 
 tags = {}

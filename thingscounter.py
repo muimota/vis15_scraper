@@ -9,9 +9,10 @@ reload(sys)  # Reload does the trick!
 sys.setdefaultencoding("utf-8")
 
 validLetters = string.letters+'áéíóú'+'ÁÉÍÓÚ'+'ñÑ'
-writtenNumbers = {"decena de":10,"veintena de":20,"decenas de":50,"cien":100,"doscientas":200,"doscientos":200,
+#TODO:aqui habría que ir con orden para evitar casos como "dos" unidades de "mil" en vez "dos mil"
+writtenNumbers = {"decena de":10,"veintena de":20,"treintena de":30,"decenas de":50,"centenar de":100,"cien":100,"doscientas":200,"doscientos":200,
 	"trescientas":300,"trescientos":300,"cuatrocientas":400,"cuatrocientos":400,"quinientas":500,"quinientas":500,
-	"cientos de":500,"mil":1000,"miles de":5000,"decenas de miles":50000}
+	"cientos de":500,"mil":1000,"dos mil":2000,"millar de":1000,"miles de":5000,"decenas de miles":50000}
 
 def nonExtrictThingsCounter(text):
 	

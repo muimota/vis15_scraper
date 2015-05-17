@@ -10,7 +10,7 @@ sys.setdefaultencoding("utf-8")
 filename = 'protests.pickle'
 graph = pickle.load(open(filename,'rb'))
 
-#make a list with all the tags all the tags
+#make a list with all the tags
 
 tags = set()
 
