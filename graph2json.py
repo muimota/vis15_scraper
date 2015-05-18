@@ -7,22 +7,22 @@ from webcache import WebCache
 reload(sys)  # Reload does the trick!
 sys.setdefaultencoding("utf-8")
 
-filename = 'protests.pickle'
+filename = 'protestas4.pickle'
 graph = pickle.load(open(filename,'rb'))
 
 #make a list with all the tags
 
-tags = set()
+tagNames = set()
 
 for articleId in graph:
 	
 	article = graph[articleId]
 	articleTags = article['tags']
 	
-	for tag in articleTags:
-		tags.add(tag)
+	for tagName in articleTags:
+		tagNames.add(tagName)
 
-tags = list(tags)
+tagNames = list(tagNames)
 
 #make a list with all the this all the things
 
@@ -44,59 +44,107 @@ things = list(things)
 
 
 
-articles = {}
+datedArticles = {}
 articleIds = graph.keys()
 
 data = {}
+places = set()
 
-
+articleIndex = 0
 for articleId in articleIds:
 	
-	article = {};
+	datedArticle = {};
 	articleOrig = graph[articleId]
 	articleTags = articleOrig['tags']
 	
-	article['tags']=[]
+	datedArticle['tags']=[]
 
-	for tag in articleTags:
-		article['tags'].append(tags.index(tag))
+	for tagName in articleTags:
+		datedArticle['tags'].append(tagNames.index(tagName))
 
 
 	if 'things' in articleOrig:
 		
 		articleThings = articleOrig['things']
-		article['things'] = {}
+		datedArticle['things'] = {}
 		for thing in articleThings:
 			index  = things.index(thing)
 			value  = articleThings[thing]
-			article['things'][index]=value
+			datedArticle['things'][index]=value
 			
+		#print datedArticle['things']
 
-	article['title']	 = articleOrig['title']
-	article['subtitles'] = articleOrig['subtitles']
-	article['place']	 = articleOrig['place']
-	article['url']		 = articleOrig['url']
-	date 				 = articleOrig['date']
-	
-	if date in articles:
-		articles[date].append(article)
+	datedArticle['title']	 = articleOrig['title']
+	#article['subtitles'] = articleOrig['subtitles']
+	datedArticle['place']	 = articleOrig['place']
+	datedArticle['url']		 = articleOrig['url']
+	datedArticle['date']	 = articleOrig['date']
+	datedArticle['id']		 = articleIndex
+ 	date 				     = articleOrig['date']
+	articleIndex = articleIndex + 1
+	print datedArticle['place']
+	for place in datedArticle['place']:
+		places.add(place)
+
+	if date in datedArticles:
+		datedArticles[date].append(datedArticle)
 	else:
-		articles[date] = [article]
+		datedArticles[date] = [datedArticle]
 
 
-data = {'articles':articles,'tags':tags,'things':things}
-json.dump(data,open('protests.json','w'))
 
-articleIds = data['articles'].keys()
-print len(articleIds)
-for articleId in articleIds:
-	articles = data['articles'][articleId]
-	for article in articles:
-		if 'things' in article:
-			print article['url']
-			for thing in article['things']:
-				print data['things'][thing]
-				print article['things'][thing]
+timeline = datedArticles.keys()
+timeline.sort();
+
+articles = []
+for date in timeline:
+	#print datedArticles[date]
+	articles = articles + datedArticles[date]
+
+
+articles = dict(zip(range(len(articles)),articles))
+
+#print "articles"
+#print articles
+
+tagMap = {}
+for articleId in articles:
+	article = articles[articleId]
+	tagIds  = article['tags']
+	for tagId in tagIds:
+		if tagId in tagMap:
+			tagMap[tagId].add(articleId)
+		else:
+			tagMap[tagId] = set([articleId])
+
+for tagId in tagMap:
+	tagMap[tagId] = list(tagMap[tagId])
+
+
+
+data = {'articles':articles,'tagNames':tagNames,'tagMap':tagMap,'things':things}
+json.dump(data,open('protests4.json','w'))
+
+f = open("places.csv","w")
+places = list(places)
+places.sort()
+for place in places:
+	print place
+	f.write(place+'\n')
+f.close()
+
+
+# articleIds = data['articles'].keys()
+# print len(articleIds)
+# for articleId in articleIds:
+# 	article = data['articles'][articleId]
+
+# 	if 'things' in article:
+# 		print article['url']
+# 		print article['things'];
+# 		for thing in article['things']:
+# 			print data['things'][thing]
+# 			print article['things'][thing]
 
 
 
