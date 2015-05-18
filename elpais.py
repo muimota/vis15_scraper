@@ -21,9 +21,19 @@ def parseArticle(url,webcache = None):
 	except:
 		author	= ""
 	try:
-		place	= firma.select("span.data")[0].text.strip()
+		articlePlaces = firma.select("span.data")[0].text.strip()
+		articlePlaces = articlePlaces.encode('utf8')
+		articlePlaces = articlePlaces.split('/')
+		#unificamos
+		for i in range(len(articlePlaces)):
+			articlePlace = articlePlaces[i]
+			articlePlace = articlePlace.translate(None,",.")
+			articlePlace = articlePlace.strip()
+			articlePlaces[i] = articlePlace
+			
 	except:
-		place	= ""
+		articlePlaces	= []
+
 	date    = firma.select("a.actualizado")[0]['href'].split('/')[-1]
 
 	subtitles = []
@@ -43,7 +53,7 @@ def parseArticle(url,webcache = None):
 	for li in tagsLi:
 		tags.append(li.text)
 
-	article = {"author":author,"title":title,"tags":tags,"subtitles":subtitles,"links":links,"url":url,"place":place,"date":date}
+	article = {"author":author,"title":title,"tags":tags,"subtitles":subtitles,"links":links,"url":url,"place":articlePlaces,"date":date}
 	return article
 
 
