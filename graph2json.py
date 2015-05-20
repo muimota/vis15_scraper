@@ -7,7 +7,7 @@ from webcache import WebCache
 reload(sys)  # Reload does the trick!
 sys.setdefaultencoding("utf-8")
 
-filename = 'protestas4.pickle'
+filename = 'protests4.pickle'
 graph = pickle.load(open(filename,'rb'))
 
 #make a list with all the tags
@@ -79,7 +79,7 @@ for articleId in articleIds:
 	datedArticle['place']	 = articleOrig['place']
 	datedArticle['url']		 = articleOrig['url']
 	datedArticle['date']	 = articleOrig['date']
-	datedArticle['id']		 = articleIndex
+	datedArticle['id']		 = articleId
  	date 				     = articleOrig['date']
 	articleIndex = articleIndex + 1
 	print datedArticle['place']
@@ -104,6 +104,9 @@ for date in timeline:
 
 articles = dict(zip(range(len(articles)),articles))
 
+for i in range(len(articles)):
+	article = articles[i]
+	article['id'] = i
 #print "articles"
 #print articles
 
