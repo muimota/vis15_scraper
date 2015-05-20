@@ -9,7 +9,7 @@ sys.setdefaultencoding("utf-8")
 things = {}
 
 wb  = WebCache()
-filename = 'protestas.pickle'
+filename = 'protestas4.pickle'
 graph = pickle.load(open(filename,'rb'))
 
 articleIds = graph.keys()
@@ -39,7 +39,7 @@ for thing in things:
 	f.write(line+'\n')
 f.close()
 
-filename = 'protests.pickle'
+filename = 'protests4.pickle'
 pickle.dump(graph,open(filename,'wb'))
 
 articleIds = graph.keys()

@@ -15,7 +15,7 @@ articleUrls = wb.listUrls();
 def getArticleId(articleUrl):
 	return articleUrl.split('/')[-1][:-5]
 
-filename = 'protestas.pickle'
+filename = 'protestas4.pickle'
 if(os.path.isfile(filename)):
 	graph = pickle.load(open(filename,'rb'))
 else:

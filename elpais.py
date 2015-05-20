@@ -16,10 +16,12 @@ def parseArticle(url,webcache = None):
 	body  = soup.select("#cuerpo_noticia")[0].text.strip()
 
 	firma = soup.select("span.firma")[0]
+	
 	try:
 		author	= firma.find("a", rel="author").text.strip()
 	except:
 		author	= ""
+
 	try:
 		articlePlaces = firma.select("span.data")[0].text.strip()
 		articlePlaces = articlePlaces.encode('utf8')
