@@ -1,0 +1,6 @@
+htmlpages.db
+*.pyc
+*.json
+*.csv
+*.pickle
+.DS_Store
