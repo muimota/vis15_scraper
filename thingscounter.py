@@ -59,7 +59,7 @@ def nonExtrictThingsCounter(text):
 def thingsCounter(text):
 	#http://stackoverflow.com/a/4289557
 	things = {}
-	numbers = re.findall('\\b\\d+\\.?\\d+\\b', text)
+	numbers = re.findall('\\b\\d*\\.?\\d+\\b', text)
 	index = 0;
 
 	for number in numbers:
@@ -126,5 +126,5 @@ if __name__ == '__main__':
 	articleBody = getArticleBody(url)
 
 	
-	print nonExtrictThingsCounter("Cientos de vecinos opuestos a los parquímetros")
+	print nonExtrictThingsCounter(articleBody)
 

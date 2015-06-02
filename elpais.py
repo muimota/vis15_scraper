@@ -4,7 +4,9 @@ from bs4 import BeautifulSoup
 from webcache import WebCache
 
 def parseArticle(url,webcache = None):
-	
+
+	"""returns a dict with information about the article"""
+
 	if(webcache == None):
 		html_doc = urllib.urlopen(url).read()
 	else:
@@ -54,6 +56,13 @@ def parseArticle(url,webcache = None):
 
 	for li in tagsLi:
 		tags.append(li.text)
+	
+	#remove empty strings from lists
+	#https://docs.python.org/2/library/functions.html#filter
+	articlePlaces	= filter(None,articlePlaces)
+	subtitles 		= filter(None,subtitles)
+	links			= filter(None,links)
+
 
 	article = {"author":author,"title":title,"tags":tags,"subtitles":subtitles,"links":links,"url":url,"place":articlePlaces,"date":date}
 	return article
@@ -61,6 +70,8 @@ def parseArticle(url,webcache = None):
 
 def getListPagesByTag(tag):
 	
+	"""returns a list of listpages urls realted with the tag"""
+
 	url = ("http://elpais.com/tag/%s/a/" % (tag))
 	html_doc = urllib.urlopen(url).read()
 
@@ -73,6 +84,8 @@ def getListPagesByTag(tag):
 
 def getArticlesFromListPage(url,webcache = None):
 	
+	"""returns all articles urls that are in the listpage url"""
+
 	if(webcache == None):
 		html_doc = urllib.urlopen(url).read()
 	else:
